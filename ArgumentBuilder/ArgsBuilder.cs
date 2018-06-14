@@ -111,7 +111,7 @@ namespace ArgumentBuilder
 
         private static void SetValue<T>(T data, PropertyInfo property, List<string> value)
         {
-            if (value == null) return;
+            if (value == null || value.Count == 0) return;
 
             Type type = property.PropertyType;
 
