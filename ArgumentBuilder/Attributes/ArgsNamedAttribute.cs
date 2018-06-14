@@ -7,7 +7,7 @@ namespace ArgumentBuilder.Attributes
     {
         public string Name { get; set; }
         public ArgsValueParseMethod ValueParseMethod { get; set; }
-        public ArgsNamedAttribute(string name, ArgsValueParseMethod valueParseMethod = ArgsValueParseMethod.Boolean)
+        public ArgsNamedAttribute(string name, ArgsValueParseMethod valueParseMethod)
         {
             Name = name;
             ValueParseMethod = valueParseMethod;
