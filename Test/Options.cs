@@ -7,11 +7,9 @@ namespace Test
 {
     class Options
     {
-        [ArgsNamed("--valueA", ArgsValueParseMethod.Equals)]
-        public string ValueA { get; set; }
-
-        [ArgsNamed("--valueB", ArgsValueParseMethod.Equals)]
-        public string ValueB { get; set; }
+        [ArgsNamed("--is-dead", ArgsValueParseMethod.BooleanInverted)]
+        [DefaultValue(true)]
+        public bool IsAlive { get; set; }
 
         public Options() { }
     }

@@ -35,11 +35,15 @@ namespace ArgumentBuilder
                         {
                             if (attribute.ValueParseMethod == ArgsValueParseMethod.Boolean)
                             {
-                                if (!keyValues.ContainsKey(arg))
-                                {
-                                    keyValues.Add(arg, new List<string>());
-                                    args[i] = null;
-                                }
+                                if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
+                                keyValues[arg].Add("True");
+                                args[i] = null;
+                            }
+                            else if (attribute.ValueParseMethod == ArgsValueParseMethod.BooleanInverted)
+                            {
+                                if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
+                                keyValues[arg].Add("False");
+                                args[i] = null;
                             }
                             else if (attribute.ValueParseMethod == ArgsValueParseMethod.Space && i <= args.Length - 2)
                             {
@@ -112,7 +116,7 @@ namespace ArgumentBuilder
             Type type = property.PropertyType;
 
             if (type == typeof(string)) property.SetValue(data, value[0]);
-            else if (type == typeof(bool)) property.SetValue(data, true);
+            else if (type == typeof(bool)) property.SetValue(data, Convert.ToBoolean(value[0]));
             else if (type == typeof(sbyte)) property.SetValue(data, Convert.ToSByte(value[0]));
             else if (type == typeof(byte)) property.SetValue(data, Convert.ToByte(value[0]));
             else if (type == typeof(char)) property.SetValue(data, Convert.ToChar(value[0]));

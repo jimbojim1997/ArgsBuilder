@@ -11,7 +11,7 @@ namespace Test
         {
             Options options = ArgsBuilder.Build<Options>(args);
 
-            Console.WriteLine($"ValueA:\n{options.ValueA}\nValueB:\n{options.ValueB}");
+            Console.WriteLine($"IsAlive: {options.IsAlive}");
             Console.ReadLine();
         }
     }

@@ -3,6 +3,7 @@
     public enum ArgsValueParseMethod
     {
         Boolean,
+        BooleanInverted,
         Space,
         Equals,
         Colon
