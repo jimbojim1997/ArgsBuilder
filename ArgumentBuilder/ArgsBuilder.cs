@@ -1,8 +1,8 @@
 ﻿using ArgumentBuilder.Attributes;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace ArgumentBuilder
@@ -23,6 +23,7 @@ namespace ArgumentBuilder
                 foreach(var attribute in property.GetCustomAttributes())
                 {
                     if (attribute.GetType() == typeof(ArgsNamedAttribute)) kvpAttributes.Add(attribute as ArgsNamedAttribute);
+                    else if (attribute.GetType() == typeof(DefaultValueAttribute)) SetValue<T>(data, property, (attribute as DefaultValueAttribute)?.Value.ToString());
                 }
 
                 foreach(var attribute in kvpAttributes)
