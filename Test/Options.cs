@@ -7,15 +7,11 @@ namespace Test
 {
     class Options
     {
-        [ArgsOrdered(0)]
-        public string InPath { get; set; }
+        [ArgsNamed("--valueA", ArgsValueParseMethod.Equals)]
+        public string ValueA { get; set; }
 
-        [ArgsOrdered(1)]
-        public string OutPath { get; set; }
-
-        [ArgsNamed("--other-option", ArgsValueParseMethod.Space)]
-        [ArgsNamed("-o", ArgsValueParseMethod.Space)]
-        public string OtherOption { get; set; }
+        [ArgsNamed("--valueB", ArgsValueParseMethod.Equals)]
+        public string ValueB { get; set; }
 
         public Options() { }
     }

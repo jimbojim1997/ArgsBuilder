@@ -11,7 +11,7 @@ namespace Test
         {
             Options options = ArgsBuilder.Build<Options>(args);
 
-            Console.WriteLine($"In:\n{options.InPath}\nOut:\n{options.OutPath}");
+            Console.WriteLine($"ValueA:\n{options.ValueA}\nValueB:\n{options.ValueB}");
             Console.ReadLine();
         }
     }

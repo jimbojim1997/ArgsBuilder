@@ -2,7 +2,7 @@
   "profiles": {
     "Test": {
       "commandName": "Project",
-      "commandLineArgs": "-o blah in.txt out.txt"
+      "commandLineArgs": "--valueA=abc --valueB=123"
     }
   }
 }

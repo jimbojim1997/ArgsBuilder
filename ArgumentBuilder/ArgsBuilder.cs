@@ -33,27 +33,40 @@ namespace ArgumentBuilder
                         string arg = args[i];
                         if (arg == attribute.Name)
                         {
-                            if(attribute.ValueParseMethod == ArgsValueParseMethod.Boolean)
+                            if (attribute.ValueParseMethod == ArgsValueParseMethod.Boolean)
                             {
                                 if (!keyValues.ContainsKey(arg))
                                 {
                                     keyValues.Add(arg, new List<string>());
                                     args[i] = null;
                                 }
-                            }else if(attribute.ValueParseMethod == ArgsValueParseMethod.Space && i <= args.Length - 2)
+                            }
+                            else if (attribute.ValueParseMethod == ArgsValueParseMethod.Space && i <= args.Length - 2)
                             {
-                                if (keyValues.ContainsKey(arg))
+                                if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
+                                keyValues[arg].Add(args[i + 1]);
+                                args[i] = null;
+                                args[i + 1] = null;
+                            }
+                        }else if (arg.Contains(attribute.Name))
+                        {
+                            if (attribute.ValueParseMethod == ArgsValueParseMethod.Colon)
+                            {
+                                KeyValuePair<string, string> pair = SplitStringKeyValuePair(arg, ':');
+                                if (pair.Key == attribute.Name)
                                 {
-                                    keyValues[arg].Add(args[i + 1]);
-                                    args[i] = null;
-                                    args[i + 1] = null;
+                                    if(!keyValues.ContainsKey(pair.Key)) keyValues.Add(pair.Key, new List<string>());
+                                    keyValues[pair.Key].Add(pair.Value);
                                 }
-                                else
+                                
+                            }
+                            else if (attribute.ValueParseMethod == ArgsValueParseMethod.Equals)
+                            {
+                                KeyValuePair<string, string> pair = SplitStringKeyValuePair(arg, '=');
+                                if (pair.Key == attribute.Name)
                                 {
-                                    keyValues.Add(arg, new List<string>());
-                                    keyValues[arg].Add(args[i + 1]);
-                                    args[i] = null;
-                                    args[i + 1] = null;
+                                    if (!keyValues.ContainsKey(pair.Key)) keyValues.Add(pair.Key, new List<string>());
+                                    keyValues[pair.Key].Add(pair.Value);
                                 }
                             }
                         }
@@ -114,6 +127,16 @@ namespace ArgumentBuilder
             else if (type == typeof(Decimal)) property.SetValue(data, Convert.ToDecimal(value[0]));
             else if (type == typeof(DateTime)) property.SetValue(data, Convert.ToDateTime(value[0]));
             else if (type == typeof(IEnumerable<string>)) property.SetValue(data, value as IEnumerable<string>);
+        }
+
+        private static KeyValuePair<string, string> SplitStringKeyValuePair(string text, char splitAt)
+        {
+            int splitAtIndex = text.IndexOf(splitAt);
+            if (splitAtIndex == -1) return default(KeyValuePair<string, string>);
+            string key = text.Substring(0, splitAtIndex);
+            string value = text.Substring(splitAtIndex + 1, text.Length - splitAtIndex - 1);
+
+            return new KeyValuePair<string, string>(key, value);
         }
 
         private static bool DoesTypeInherit(Type type, Type inheritFrom)
