@@ -112,7 +112,7 @@ namespace ArgumentBuilder
             else if (type == typeof(double)) property.SetValue(data, Convert.ToDouble(value[0]));
             else if (type == typeof(Decimal)) property.SetValue(data, Convert.ToDecimal(value[0]));
             else if (type == typeof(DateTime)) property.SetValue(data, Convert.ToDateTime(value[0]));
-            else if (DoesTypeInherit(type, typeof(IList<string>))) property.SetValue(data, value as IList<string>);
+            else if (type == typeof(IEnumerable<string>)) property.SetValue(data, value as IEnumerable<string>);
         }
 
         private static bool DoesTypeInherit(Type type, Type inheritFrom)

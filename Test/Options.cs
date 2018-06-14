@@ -16,7 +16,7 @@ namespace Test
         public bool IsAlive { get; set; }
 
         [ArgsNamed("--likes", ArgsValueParseMethod.Space)]
-        public List<string> Likes { get; set; }
+        public IEnumerable<string> Likes { get; set; }
 
         public Options() { }
     }
