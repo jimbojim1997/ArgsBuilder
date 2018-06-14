@@ -2,7 +2,7 @@
 
 namespace ArgumentBuilder.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    [AttributeUsage(validOn: AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class ArgsNamedAttribute : Attribute
     {
         public string Name { get; set; }

@@ -7,19 +7,15 @@ namespace Test
 {
     class Options
     {
-        [ArgsNamed("--name", ArgsValueParseMethod.Space)]
-        [DefaultValue("[No Name]")]
-        public string Name { get; set; }
+        [ArgsOrdered(0)]
+        public string InPath { get; set; }
 
-        [ArgsNamed("--age", ArgsValueParseMethod.Space)]
-        [DefaultValue(-1)]
-        public int Age { get; set; }
+        [ArgsOrdered(1)]
+        public string OutPath { get; set; }
 
-        [ArgsNamed("--is-alive", ArgsValueParseMethod.Boolean)]
-        public bool IsAlive { get; set; }
-
-        [ArgsNamed("--likes", ArgsValueParseMethod.Space)]
-        public IEnumerable<string> Likes { get; set; }
+        [ArgsNamed("--other-option", ArgsValueParseMethod.Space)]
+        [ArgsNamed("-o", ArgsValueParseMethod.Space)]
+        public string OtherOption { get; set; }
 
         public Options() { }
     }

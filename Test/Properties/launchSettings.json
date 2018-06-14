@@ -2,7 +2,7 @@
   "profiles": {
     "Test": {
       "commandName": "Project",
-      "commandLineArgs": "--name \"John Doe\" --age 20 --is-alive --likes pizza --likes cake --likes ice-cream"
+      "commandLineArgs": "-o blah in.txt out.txt"
     }
   }
 }

@@ -11,7 +11,7 @@ namespace Test
         {
             Options options = ArgsBuilder.Build<Options>(args);
 
-            Console.WriteLine($"Person {options.Name} is aged {options.Age} and is {(options.IsAlive ? "alive" : "dead")} and likes {String.Join(", ", options.Likes.ToArray())}.");
+            Console.WriteLine($"In:\n{options.InPath}\nOut:\n{options.OutPath}");
             Console.ReadLine();
         }
     }
