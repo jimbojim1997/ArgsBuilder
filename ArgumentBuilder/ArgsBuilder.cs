@@ -11,7 +11,11 @@ namespace ArgumentBuilder
     {
         public static T Build<T>(string[] args) where T : new()
         {
+            string[] workingArgs = new string[args.Length];
+            for (int i = 0; i < args.Length; i++) workingArgs[i] = args[i];
+
             T data = new T();
+
             var keyValues = new Dictionary<string, List<string>>();
             var orderedArgs = new List<string>();
 
@@ -28,29 +32,30 @@ namespace ArgumentBuilder
 
                 foreach(var attribute in kvpAttributes)
                 {
-                    for(int i = 0; i < args.Length; i++)
+                    for(int i = 0; i < workingArgs.Length; i++)
                     {
-                        string arg = args[i];
+                        string arg = workingArgs[i];
+                        if (arg == null) continue;
                         if (arg == attribute.Name)
                         {
                             if (attribute.ValueParseMethod == ArgsValueParseMethod.Boolean)
                             {
                                 if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
                                 keyValues[arg].Add("True");
-                                args[i] = null;
+                                workingArgs[i] = null;
                             }
                             else if (attribute.ValueParseMethod == ArgsValueParseMethod.BooleanInverted)
                             {
                                 if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
                                 keyValues[arg].Add("False");
-                                args[i] = null;
+                                workingArgs[i] = null;
                             }
-                            else if (attribute.ValueParseMethod == ArgsValueParseMethod.Space && i <= args.Length - 2)
+                            else if (attribute.ValueParseMethod == ArgsValueParseMethod.Space && i <= workingArgs.Length - 2)
                             {
                                 if (!keyValues.ContainsKey(arg)) keyValues.Add(arg, new List<string>());
-                                keyValues[arg].Add(args[i + 1]);
-                                args[i] = null;
-                                args[i + 1] = null;
+                                keyValues[arg].Add(workingArgs[i + 1]);
+                                workingArgs[i] = null;
+                                workingArgs[i + 1] = null;
                             }
                         }else if (arg.Contains(attribute.Name))
                         {
@@ -78,7 +83,7 @@ namespace ArgumentBuilder
                 }
             }
 
-            foreach (string arg in args) if (arg != null) orderedArgs.Add(arg);
+            foreach (string arg in workingArgs) if (arg != null) orderedArgs.Add(arg);
 
             //set data
             foreach (var property in data.GetType().GetRuntimeProperties())
@@ -109,28 +114,49 @@ namespace ArgumentBuilder
             SetValue<T>(data, property, new List<string>(new String[] { value }));
         }
 
-        private static void SetValue<T>(T data, PropertyInfo property, List<string> value)
+        private static void SetValue<T>(T data, PropertyInfo property, IList<string> values)
         {
-            if (value == null || value.Count == 0) return;
+            if (values == null || values.Count == 0) return;
 
             Type type = property.PropertyType;
 
-            if (type == typeof(string)) property.SetValue(data, value[0]);
-            else if (type == typeof(bool)) property.SetValue(data, Convert.ToBoolean(value[0]));
-            else if (type == typeof(sbyte)) property.SetValue(data, Convert.ToSByte(value[0]));
-            else if (type == typeof(byte)) property.SetValue(data, Convert.ToByte(value[0]));
-            else if (type == typeof(char)) property.SetValue(data, Convert.ToChar(value[0]));
-            else if (type == typeof(Int16)) property.SetValue(data, Convert.ToInt16(value[0]));
-            else if (type == typeof(Int32)) property.SetValue(data, Convert.ToInt32(value[0]));
-            else if (type == typeof(Int64)) property.SetValue(data, Convert.ToInt64(value[0]));
-            else if (type == typeof(UInt16)) property.SetValue(data, Convert.ToUInt16(value[0]));
-            else if (type == typeof(UInt32)) property.SetValue(data, Convert.ToUInt32(value[0]));
-            else if (type == typeof(UInt64)) property.SetValue(data, Convert.ToUInt64(value[0]));
-            else if (type == typeof(float)) property.SetValue(data, Convert.ToSingle(value[0]));
-            else if (type == typeof(double)) property.SetValue(data, Convert.ToDouble(value[0]));
-            else if (type == typeof(Decimal)) property.SetValue(data, Convert.ToDecimal(value[0]));
-            else if (type == typeof(DateTime)) property.SetValue(data, Convert.ToDateTime(value[0]));
-            else if (type == typeof(IEnumerable<string>)) property.SetValue(data, value as IEnumerable<string>);
+            if (type == typeof(string)) property.SetValue(data, values[0]);
+            else if (type == typeof(bool)) property.SetValue(data, Convert.ToBoolean(values[0]));
+            else if (type == typeof(sbyte)) property.SetValue(data, Convert.ToSByte(values[0]));
+            else if (type == typeof(byte)) property.SetValue(data, Convert.ToByte(values[0]));
+            else if (type == typeof(char)) property.SetValue(data, Convert.ToChar(values[0]));
+            else if (type == typeof(Int16)) property.SetValue(data, Convert.ToInt16(values[0]));
+            else if (type == typeof(Int32)) property.SetValue(data, Convert.ToInt32(values[0]));
+            else if (type == typeof(Int64)) property.SetValue(data, Convert.ToInt64(values[0]));
+            else if (type == typeof(UInt16)) property.SetValue(data, Convert.ToUInt16(values[0]));
+            else if (type == typeof(UInt32)) property.SetValue(data, Convert.ToUInt32(values[0]));
+            else if (type == typeof(UInt64)) property.SetValue(data, Convert.ToUInt64(values[0]));
+            else if (type == typeof(float)) property.SetValue(data, Convert.ToSingle(values[0]));
+            else if (type == typeof(double)) property.SetValue(data, Convert.ToDouble(values[0]));
+            else if (type == typeof(Decimal)) property.SetValue(data, Convert.ToDecimal(values[0]));
+            else if (type == typeof(DateTime)) property.SetValue(data, Convert.ToDateTime(values[0]));
+            else if (type == typeof(IEnumerable<string>)) property.SetValue(data, values);
+            else if (type == typeof(IEnumerable<bool>)) property.SetValue(data, ConvertList(values, v => Convert.ToBoolean(v)));
+            else if (type == typeof(IEnumerable<sbyte>)) property.SetValue(data, ConvertList(values, v => Convert.ToSByte(v)));
+            else if (type == typeof(IEnumerable<byte>)) property.SetValue(data, ConvertList(values, v => Convert.ToByte(v)));
+            else if (type == typeof(IEnumerable<char>)) property.SetValue(data, ConvertList(values, v => Convert.ToChar(v)));
+            else if (type == typeof(IEnumerable<Int16>)) property.SetValue(data, ConvertList(values, v => Convert.ToInt16(v)));
+            else if (type == typeof(IEnumerable<Int32>)) property.SetValue(data, ConvertList(values, v => Convert.ToInt32(v)));
+            else if (type == typeof(IEnumerable<Int64>)) property.SetValue(data, ConvertList(values, v => Convert.ToInt64(v)));
+            else if (type == typeof(IEnumerable<UInt16>)) property.SetValue(data, ConvertList(values, v => Convert.ToUInt16(v)));
+            else if (type == typeof(IEnumerable<UInt32>)) property.SetValue(data, ConvertList(values, v => Convert.ToUInt32(v)));
+            else if (type == typeof(IEnumerable<UInt64>)) property.SetValue(data, ConvertList(values, v => Convert.ToUInt64(v)));
+            else if (type == typeof(IEnumerable<float>)) property.SetValue(data, ConvertList(values, v => Convert.ToSingle(v)));
+            else if (type == typeof(IEnumerable<double>)) property.SetValue(data, ConvertList(values, v => Convert.ToDouble(v)));
+            else if (type == typeof(IEnumerable<Decimal>)) property.SetValue(data, ConvertList(values, v => Convert.ToDecimal(v)));
+            else if (type == typeof(IEnumerable<DateTime>)) property.SetValue(data, ConvertList(values, v => Convert.ToDateTime(v)));
+        }
+
+        private static IEnumerable<T> ConvertList<T>(IEnumerable<string> values, Func<string, T> convert)
+        {
+            List<T> result = new List<T>();
+            foreach (string v in values) result.Add(convert(v));
+            return result;
         }
 
         private static KeyValuePair<string, string> SplitStringKeyValuePair(string text, char splitAt)

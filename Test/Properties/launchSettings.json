@@ -2,7 +2,7 @@
   "profiles": {
     "Test": {
       "commandName": "Project",
-      "commandLineArgs": "--is-dead"
+      "commandLineArgs": "-i 123.321 -i 456.654 -i 789.987"
     }
   }
 }

@@ -11,7 +11,8 @@ namespace Test
         {
             Options options = ArgsBuilder.Build<Options>(args);
 
-            Console.WriteLine($"IsAlive: {options.IsAlive}");
+            Console.WriteLine($"Items:");
+            foreach (var i in options.Items) Console.WriteLine(i);
             Console.ReadLine();
         }
     }

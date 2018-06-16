@@ -7,9 +7,8 @@ namespace Test
 {
     class Options
     {
-        [ArgsNamed("--is-dead", ArgsValueParseMethod.BooleanInverted)]
-        [DefaultValue(true)]
-        public bool IsAlive { get; set; }
+        [ArgsNamed("-i", ArgsValueParseMethod.Space)]
+        public IEnumerable<double> Items { get; set; }
 
         public Options() { }
     }
