@@ -9,6 +9,13 @@ namespace ArgumentBuilder
 {
     public static class ArgsBuilder
     {
+        /// <summary>
+        /// Populates the properties on the type <c>T</c> to the value supplied in <c>args</c>.
+        /// </summary>
+        /// <typeparam name="T">The type to create and populate with values.</typeparam>
+        /// <param name="args">The argument array to read the values from.</param>
+        /// <returns>An object of type <c>T</c> with the properties populated with the values from <c>args</c>.</returns>
+        /// <exception cref="InvalidTypeException">Thrown when <c>T</c> has a property of a type that isn't supported.</exception>
         public static T Build<T>(string[] args) where T : new()
         {
             string[] workingArgs = new string[args.Length];
@@ -111,11 +118,26 @@ namespace ArgumentBuilder
             return data;
         }
 
+        /// <summary>
+        /// Sets the <c>property</c> value to <c>value</c> on the <c>data</c> object.
+        /// </summary>
+        /// <typeparam name="T">The type of property to be set on.</typeparam>
+        /// <param name="data">The data to set the value on.</param>
+        /// <param name="property">The property to be set.</param>
+        /// <param name="value">The value to set the property to.</param>
         private static void SetValue<T>(T data, PropertyInfo property, string value)
         {
             SetValue<T>(data, property, new List<string>(new String[] { value }));
         }
 
+        /// <summary>
+        /// Sets the <c>property</c> value to <c>value</c> on the <c>data</c> object.
+        /// </summary>
+        /// <typeparam name="T">The type of property to be set on.</typeparam>
+        /// <param name="data">The data to set the value on.</param>
+        /// <param name="property">The property to be set.</param>
+        /// <param name="values">The value to set the property to.</param>
+        /// <exception cref="InvalidTypeException">Thrown when <c>T</c> is a type that isn't supported.</exception>
         private static void SetValue<T>(T data, PropertyInfo property, IList<string> values)
         {
             if (values == null || values.Count == 0) return;
@@ -155,6 +177,11 @@ namespace ArgumentBuilder
             else throw new InvalidTypeException($"Type \"{typeof(T).FullName}\" is not a supported type. See documentation for supported types.");
         }
 
+        /// <summary>
+        /// Checks if the type is supported by the builder.
+        /// </summary>
+        /// <param name="type">The type to check support for.</param>
+        /// <returns>True if it's a supported type, false if not.</returns>
         private static bool IsValidType(Type type)
         {
             if (type == typeof(string) ||
@@ -190,6 +217,13 @@ namespace ArgumentBuilder
             return false;
         }
 
+        /// <summary>
+        /// Converts and <c><![CDATA[IEnumberable<string>]]></c> to an <c><![CDATA[IEnumberable<T>]]>]]></c>.
+        /// </summary>
+        /// <typeparam name="T">The type to convert items to.</typeparam>
+        /// <param name="values">The values to be converted.</param>
+        /// <param name="convert">Function that performs the conversion.</param>
+        /// <returns>A converted <c><![CDATA[IEnumberable<T>]]>]]></c> from <c>values</c>.</returns>
         private static IEnumerable<T> ConvertList<T>(IEnumerable<string> values, Func<string, T> convert)
         {
             List<T> result = new List<T>();
@@ -197,6 +231,12 @@ namespace ArgumentBuilder
             return result;
         }
 
+        /// <summary>
+        /// Splits a string into a <c><![CDATA[KeyValuesPair<string, string>]]></c> at the specified character.
+        /// </summary>
+        /// <param name="text">The text to be split.</param>
+        /// <param name="splitAt">The character to split at.</param>
+        /// <returns>A <c><![CDATA[KeyValuesPair<string, string>]]></c> from the supplied text split at <c>splitAt</c>.</returns>
         private static KeyValuePair<string, string> SplitStringKeyValuePair(string text, char splitAt)
         {
             int splitAtIndex = text.IndexOf(splitAt);
@@ -207,6 +247,12 @@ namespace ArgumentBuilder
             return new KeyValuePair<string, string>(key, value);
         }
 
+        /// <summary>
+        /// Checks if a type inherits from another.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <param name="inheritFrom">The type to check if <c>type</c> inherits from.</param>
+        /// <returns>True if <c>type</c> inherits from <c>inheritsFrom</c>, False if not.</returns>
         private static bool DoesTypeInherit(Type type, Type inheritFrom)
         {
             foreach (Type t in type.GetInterfaces()) if (t.Equals(inheritFrom)) return true;

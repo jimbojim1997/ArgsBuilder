@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace ArgumentBuilder
 {
+    /// <summary>
+    /// Thrown when an invalid or unexpected type is used.
+    /// </summary>
     class InvalidTypeException : Exception
     {
         public InvalidTypeException()
