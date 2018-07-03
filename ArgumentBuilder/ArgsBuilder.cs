@@ -223,7 +223,7 @@ namespace ArgumentBuilder
         /// <typeparam name="T">The type to convert items to.</typeparam>
         /// <param name="values">The values to be converted.</param>
         /// <param name="convert">Function that performs the conversion.</param>
-        /// <returns>A converted <c><![CDATA[IEnumberable<T>]]>]]></c> from <c>values</c>.</returns>
+        /// <returns>A converted <c><![CDATA[IEnumberable<T>]]></c> from <c>values</c>.</returns>
         private static IEnumerable<T> ConvertList<T>(IEnumerable<string> values, Func<string, T> convert)
         {
             List<T> result = new List<T>();
