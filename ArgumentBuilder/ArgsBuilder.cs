@@ -22,6 +22,8 @@ namespace ArgumentBuilder
             // Get data
             foreach(var property in data.GetType().GetRuntimeProperties())
             {
+                if (!IsValidType(property.PropertyType)) throw new InvalidTypeException($"Type \"{property.PropertyType.FullName}\" is not a supported type. See documentation for supported types.");
+
                 var kvpAttributes = new List<ArgsNamedAttribute>();
 
                 foreach(var attribute in property.GetCustomAttributes())
@@ -150,6 +152,42 @@ namespace ArgumentBuilder
             else if (type == typeof(IEnumerable<double>)) property.SetValue(data, ConvertList(values, v => Convert.ToDouble(v)));
             else if (type == typeof(IEnumerable<Decimal>)) property.SetValue(data, ConvertList(values, v => Convert.ToDecimal(v)));
             else if (type == typeof(IEnumerable<DateTime>)) property.SetValue(data, ConvertList(values, v => Convert.ToDateTime(v)));
+            else throw new InvalidTypeException($"Type \"{typeof(T).FullName}\" is not a supported type. See documentation for supported types.");
+        }
+
+        private static bool IsValidType(Type type)
+        {
+            if (type == typeof(string) ||
+                type == typeof(bool) ||
+                type == typeof(sbyte) ||
+                type == typeof(byte) ||
+                type == typeof(char) ||
+                type == typeof(Int16) ||
+                type == typeof(Int32) ||
+                type == typeof(Int64) ||
+                type == typeof(UInt16) ||
+                type == typeof(UInt32) ||
+                type == typeof(UInt64) ||
+                type == typeof(float) ||
+                type == typeof(double) ||
+                type == typeof(Decimal) ||
+                type == typeof(DateTime) ||
+                type == typeof(IEnumerable<string>) ||
+                type == typeof(IEnumerable<bool>) ||
+                type == typeof(IEnumerable<sbyte>) ||
+                type == typeof(IEnumerable<char>) ||
+                type == typeof(IEnumerable<Int16>) ||
+                type == typeof(IEnumerable<Int32>) ||
+                type == typeof(IEnumerable<Int64>) ||
+                type == typeof(IEnumerable<UInt16>) ||
+                type == typeof(IEnumerable<UInt32>) ||
+                type == typeof(IEnumerable<UInt64>) ||
+                type == typeof(IEnumerable<float>) ||
+                type == typeof(IEnumerable<double>) ||
+                type == typeof(IEnumerable<Decimal>) ||
+                type == typeof(IEnumerable<DateTime>)
+                ) return true;
+            return false;
         }
 
         private static IEnumerable<T> ConvertList<T>(IEnumerable<string> values, Func<string, T> convert)

@@ -1,14 +1,13 @@
-﻿using ArgumentBuilder.Attributes;
-
+﻿using System;
+using ArgumentBuilder.Attributes;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Test
 {
     class Options
     {
-        [ArgsNamed("-i", ArgsValueParseMethod.Space)]
-        public IEnumerable<double> Items { get; set; }
+        [ArgsNamed("--name", ArgsValueParseMethod.Space)]
+        public List<String> Name { get; set; }
 
         public Options() { }
     }
