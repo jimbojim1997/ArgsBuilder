@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgumentBuilder", "ArgumentBuilder\ArgumentBuilder.csproj", "{0278F645-C439-44DA-B1B2-DB20B13FD6A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArgumentBuilder", "ArgumentBuilder\ArgumentBuilder.csproj", "{0278F645-C439-44DA-B1B2-DB20B13FD6A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{D4FB54E6-F868-45E2-9C64-B6DFC7AE0422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{D4FB54E6-F868-45E2-9C64-B6DFC7AE0422}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A11EBF0C-E8A5-496F-94FE-024F97B0665A}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
